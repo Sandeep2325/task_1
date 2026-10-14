@@ -65,17 +65,20 @@ LOGGING = {
     "loggers": {"httpx": {"level": "WARNING"}},
 }
 
+# Port the service listens on; the mock systems and mock issuer default to it.
+PORT = env("PORT", "8000")
+
 # --- Identity -----------------------------------------------------------------
 # In production OIDC_JWKS_URL points at the customer's IdP. Without it the
 # service trusts the local dev key that the mock issuer signs with.
-OIDC_ISSUER = env("OIDC_ISSUER", "http://127.0.0.1:8000/mock/oidc")
+OIDC_ISSUER = env("OIDC_ISSUER", f"http://127.0.0.1:{PORT}/mock/oidc")
 OIDC_AUDIENCE = env("OIDC_AUDIENCE", "cloudworx-workspace-api")
 OIDC_JWKS_URL = env("OIDC_JWKS_URL")
 DEV_KEYS_DIR = Path(env("DEV_KEYS_DIR", str(BASE_DIR / ".dev-keys")))
 
 # --- Upstream systems -----------------------------------------------------------
 MOCKS_ENABLED = env_bool("MOCKS_ENABLED", True)
-MOCK_BASE_URL = env("MOCK_BASE_URL", "http://127.0.0.1:8000/mock").rstrip("/")
+MOCK_BASE_URL = env("MOCK_BASE_URL", f"http://127.0.0.1:{PORT}/mock").rstrip("/")
 
 INTEGRATIONS = {
     "catalogue": {

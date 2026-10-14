@@ -13,4 +13,4 @@ USER app
 
 EXPOSE 8000
 HEALTHCHECK CMD python -c "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/healthz')"
-CMD ["sh", "-c", "python manage.py migrate --noinput && python manage.py seed_demo && uvicorn config.asgi:application --host 0.0.0.0 --port 8000"]
+CMD ["python", "dev.py", "--host", "0.0.0.0", "--port", "8000"]

@@ -14,4 +14,6 @@ urlpatterns = [
 ]
 
 if settings.MOCKS_ENABLED:
-    urlpatterns.append(path("mock/", include("mocks.urls")))
+    from mocks.views import console
+
+    urlpatterns += [path("", console), path("mock/", include("mocks.urls"))]

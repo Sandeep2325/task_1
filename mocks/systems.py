@@ -25,10 +25,22 @@ SIZING_TOOL_VERSION = "2.4.1"
 
 _rng = random.Random()
 _pricing_calls: deque[float] = deque()
+# Runtime switches set from the dev console (POST /mock/control); they win over settings.
+overrides: dict = {}
 
 
 def reset():
     _pricing_calls.clear()
+    overrides.clear()
+
+
+def sizing_conf() -> dict:
+    conf = dict(settings.MOCK_SIZING)
+    if "sizing_failure_rate" in overrides:
+        conf["failure_rate"] = overrides["sizing_failure_rate"]
+    if "sizing_latency_s" in overrides:
+        conf["latency_s"] = tuple(overrides["sizing_latency_s"])
+    return conf
 
 
 def _json(status, body, headers=None):
@@ -69,7 +81,7 @@ async def _sizing(request, rest):
     if not request.headers.get("authorization", "").startswith("Bearer "):
         return _json(401, {"error": "missing_delegated_token"})
 
-    conf = settings.MOCK_SIZING
+    conf = sizing_conf()
     lo, hi = conf["latency_s"]
     await asyncio.sleep(_rng.uniform(lo, hi))
     if _rng.random() < conf["failure_rate"]:

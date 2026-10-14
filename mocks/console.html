@@ -1,0 +1,394 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Workspace Dev Console</title>
+<style>
+  :root {
+    --bg: #f6f7f9; --panel: #ffffff; --ink: #1b2330; --quiet: #5d6878; --line: #dde2ea;
+    --accent: #2f6fde; --accent-soft: #e6eefc; --ok: #1f8a4c; --stale: #b7791f; --bad: #c53030; --off: #718096;
+    --room: #101a2c; --room-line: #24324d;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #0f141c; --panel: #171e29; --ink: #e6ebf2; --quiet: #9aa6b8; --line: #2a3442;
+      --accent: #5b8ff0; --accent-soft: #1d2a42; --room: #0b1220; --room-line: #1f2b43; }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font: 14px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif; background: var(--bg); color: var(--ink); }
+  header { display: flex; flex-wrap: wrap; gap: 12px 24px; align-items: center; padding: 12px 20px; background: var(--panel); border-bottom: 1px solid var(--line); }
+  header h1 { font-size: 16px; margin: 0 12px 0 0; }
+  .group { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .label { color: var(--quiet); font-size: 12px; }
+  select, input, button { font: inherit; color: var(--ink); background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: 5px 8px; }
+  input { width: 76px; }
+  button { cursor: pointer; }
+  button:hover { border-color: var(--accent); }
+  button.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+  button.on { background: var(--accent-soft); border-color: var(--accent); }
+  main { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(320px, 1fr); gap: 16px; padding: 16px 20px; }
+  @media (max-width: 900px) { main { grid-template-columns: 1fr; padding: 12px; } }
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; margin-bottom: 16px; }
+  .card h2 { font-size: 13px; text-transform: uppercase; letter-spacing: .06em; margin: 0 0 10px; color: var(--quiet); display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+  .room { position: relative; background: var(--room); border-radius: 8px; aspect-ratio: 12 / 7; overflow: hidden;
+    background-image: linear-gradient(var(--room-line) 1px, transparent 1px), linear-gradient(90deg, var(--room-line) 1px, transparent 1px);
+    background-size: calc(100% / 12) calc(100% / 7); }
+  .item { position: absolute; width: calc(100% / 12 * 1.6); height: calc(100% / 7 * .62); transform: translate(-20%, 20%);
+    border-radius: 6px; color: #fff; font-size: 12px; font-weight: 600; display: grid; place-items: center; cursor: pointer;
+    border: 2px solid transparent; user-select: none; }
+  .item.drive { background: #2f6fde; } .item.cabinet { background: #3b4a66; } .item.panel { background: #2c7a7b; }
+  .item.selected { border-color: #f6ad3b; box-shadow: 0 0 0 3px rgba(246,173,59,.35); }
+  .item.violation { background: #c53030; }
+  .hint { color: var(--quiet); font-size: 12px; margin: 8px 0 0; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th, td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { color: var(--quiet); font-weight: 500; font-size: 12px; }
+  td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+  .badge { display: inline-block; font-size: 11px; font-weight: 600; padding: 1px 8px; border-radius: 999px; color: #fff; text-transform: none; letter-spacing: 0; }
+  .s-ok { background: var(--ok); } .s-stale { background: var(--stale); } .s-unavailable { background: var(--bad); } .s-not_permitted { background: var(--off); }
+  .s-partial { background: var(--stale); } .s-pending { background: var(--accent); }
+  .panel { border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; margin-bottom: 10px; }
+  .panel-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 6px; }
+  .panel-head b { font-size: 13px; text-transform: uppercase; letter-spacing: .05em; }
+  .kv { display: grid; grid-template-columns: max-content 1fr; gap: 2px 12px; font-size: 13px; }
+  .kv span:nth-child(odd) { color: var(--quiet); }
+  .meta { color: var(--quiet); font-size: 12px; margin-top: 6px; }
+  .err { color: var(--bad); font-size: 12px; margin-top: 4px; }
+  .spin { display: inline-block; width: 10px; height: 10px; border: 2px solid var(--accent); border-right-color: transparent; border-radius: 50%; animation: s .8s linear infinite; vertical-align: -1px; }
+  @keyframes s { to { transform: rotate(360deg); } }
+  .row { display: flex; gap: 8px; align-items: end; flex-wrap: wrap; }
+  .row label { display: grid; gap: 2px; font-size: 12px; color: var(--quiet); }
+  .notice { border-left: 3px solid var(--accent); background: var(--accent-soft); padding: 8px 10px; border-radius: 4px; font-size: 13px; margin-top: 10px; }
+  .notice.warn { border-color: var(--bad); }
+  pre { background: var(--bg); border: 1px solid var(--line); border-radius: 6px; padding: 10px; font-size: 12px; overflow: auto; max-height: 280px; margin: 8px 0 0; }
+  .log { font: 12px/1.6 ui-monospace, Consolas, monospace; max-height: 200px; overflow: auto; }
+  .log div { white-space: nowrap; }
+  .totals { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-top: 10px; font-size: 13px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Workspace dev console <span class="label">P-24117 · water plant pump room</span></h1>
+  <div class="group">
+    <span class="label">Signed in as</span>
+    <select id="role">
+      <option value="sales_engineer">Sales engineer</option>
+      <option value="channel_partner">Channel partner</option>
+      <option value="administrator">Administrator</option>
+    </select>
+    <select id="country">
+      <option>DE</option><option>FR</option><option>GB</option><option>US</option><option>IN</option>
+      <option value="BR">BR (no price list)</option>
+    </select>
+    <span id="who" class="label"></span>
+  </div>
+  <div class="group">
+    <span class="label">Mock sizing tool</span>
+    <button data-mode="normal">Normal: 0.5–3 s, 20% fail</button>
+    <button data-mode="healthy">Fast, healthy</button>
+    <button data-mode="slow">Slow: 2.5 s</button>
+    <button data-mode="down">Down</button>
+    <button id="reset">Reset demo</button>
+  </div>
+</header>
+
+<main>
+  <section>
+    <div class="card">
+      <h2>3D workspace (top view) <span class="label">click an item</span></h2>
+      <div class="room" id="room"></div>
+      <p class="hint">Red = rule violation (frame does not fit its cabinet). Positions come from the saved layout.</p>
+    </div>
+
+    <div class="card">
+      <h2>Bill of materials <button id="bom-refresh">Refresh</button></h2>
+      <div id="bom"></div>
+    </div>
+
+    <div class="card">
+      <h2>Assistant tools <span class="label">run as the signed-in user</span></h2>
+      <div class="row">
+        <button id="tool-details">get_item_details (selected)</button>
+        <button id="tool-bom">get_bom_cost</button>
+        <button id="tool-resize">resize_item (uses the form values)</button>
+      </div>
+      <div id="tool-out"></div>
+    </div>
+
+    <div class="card">
+      <h2>Request log</h2>
+      <div class="log" id="log"></div>
+    </div>
+  </section>
+
+  <aside>
+    <div class="card">
+      <h2><span id="sel-title">Sidebar</span> <span id="sel-meta" class="label"></span></h2>
+      <div id="sidebar"></div>
+    </div>
+
+    <div class="card">
+      <h2>Re-size selected drive</h2>
+      <div class="row">
+        <label>Motor kW <input id="power" type="number" step="1" value="75"></label>
+        <label>Voltage
+          <select id="voltage"><option>400</option><option>690</option></select>
+        </label>
+        <label>Load % <input id="load" type="number" step="5" value="130"></label>
+        <button class="primary" id="resize">Re-size</button>
+      </div>
+      <div id="resize-out"></div>
+    </div>
+  </aside>
+</main>
+
+<script>
+const PROJECT = 'P-24117';
+const $ = id => document.getElementById(id);
+let token = null, claims = {}, items = [], selected = 'DRV-03', violations = {}, streamAbort = null;
+
+const esc = v => String(v ?? '').replace(/[&<>"']/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'}[c]));
+const badge = s => `<span class="badge s-${esc(s)}">${esc(String(s).replace('_', ' '))}</span>`;
+const money = (v, cur) => v == null ? '' : new Intl.NumberFormat(undefined, {style: 'currency', currency: cur}).format(v);
+const time = iso => iso ? new Date(iso).toLocaleTimeString() : '';
+const kv = pairs => `<div class="kv">${pairs.filter(p => p[1] !== undefined && p[1] !== null && p[1] !== '').map(([k, v]) => `<span>${esc(k)}</span><span>${esc(v)}</span>`).join('')}</div>`;
+
+function log(method, path, status, ms) {
+  const line = document.createElement('div');
+  line.textContent = `${new Date().toLocaleTimeString()}  ${method.padEnd(4)} ${status}  ${String(ms).padStart(5)} ms  ${path}`;
+  line.style.color = status >= 400 ? 'var(--bad)' : '';
+  $('log').prepend(line);
+}
+
+async function api(method, path, body, auth = true) {
+  const t0 = performance.now();
+  const headers = {'Content-Type': 'application/json'};
+  if (auth && token) headers.Authorization = `Bearer ${token}`;
+  let res;
+  try {
+    res = await fetch(path, {method, headers, body: body ? JSON.stringify(body) : undefined});
+  } catch (e) {
+    log(method, path, 0, Math.round(performance.now() - t0));
+    return {ok: false, status: 0, data: {error: 'network', detail: String(e)}};
+  }
+  const data = await res.json().catch(() => null);
+  log(method, path, res.status, Math.round(performance.now() - t0));
+  return {ok: res.ok, status: res.status, data};
+}
+
+async function signIn() {
+  const role = $('role').value, country = $('country').value;
+  const r = await api('POST', '/mock/oidc/token', {role, country, sub: `${role}-${country}`.toLowerCase()}, false);
+  token = r.data.access_token;
+  claims = JSON.parse(atob(token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/')));
+  $('who').textContent = `${claims.sub} · ${claims.role} · ${claims.country}`;
+  await refreshAll();
+}
+
+async function refreshAll() {
+  await loadLayout();
+  await Promise.all([loadSidebar(), loadBom()]);
+}
+
+async function loadLayout() {
+  const r = await api('GET', `/api/projects/${PROJECT}`);
+  if (!r.ok) { $('room').innerHTML = `<p class="err">${esc(r.data?.detail || r.status)}</p>`; return; }
+  items = r.data.items;
+  $('room').innerHTML = items.map(i => `
+    <div class="item ${esc(i.kind)} ${i.tag === selected ? 'selected' : ''} ${violations[i.tag] ? 'violation' : ''}"
+         style="left:${(i.position.x / 12) * 100}%; top:${(i.position.y / 7) * 100}%"
+         title="${esc(i.variant_code)} · rev ${esc(i.revision)}" data-tag="${esc(i.tag)}">${esc(i.tag)}</div>`).join('');
+  document.querySelectorAll('.item').forEach(el => el.onclick = () => select(el.dataset.tag));
+  const item = items.find(i => i.tag === selected);
+  if (item?.sizing_inputs) {
+    $('power').value = item.sizing_inputs.power_kw;
+    $('voltage').value = item.sizing_inputs.voltage;
+  }
+}
+
+async function select(tag) {
+  selected = tag;
+  document.querySelectorAll('.item').forEach(el => el.classList.toggle('selected', el.dataset.tag === tag));
+  const item = items.find(i => i.tag === tag);
+  if (item?.sizing_inputs) {
+    $('power').value = item.sizing_inputs.power_kw;
+    $('voltage').value = item.sizing_inputs.voltage;
+    $('load').value = item.sizing_inputs.load_pct;
+  }
+  $('resize-out').innerHTML = '';
+  await loadSidebar();
+}
+
+function renderSection(name, s) {
+  const d = s.data || {};
+  let body = '';
+  if (s.status === 'not_permitted') body = '<div class="meta">Hidden for this role. The server never fetched it.</div>';
+  else if (!s.data) body = '';
+  else if (name === 'sizing') body = kv([
+    ['Recommended', `${d.variant_code} (frame ${d.frame}, ${d.rated_kw} kW)`],
+    ['Motor', `${d.inputs?.power_kw} kW, ${d.inputs?.voltage} V, ${d.inputs?.load_pct}% load`],
+    ['Required', d.required_kw != null ? `${d.required_kw} kW` : ''],
+    ['Utilisation', `${d.utilisation_pct}%`],
+    ['Tool version', d.tool_version]]);
+  else if (name === 'catalogue') body = kv([
+    ['Name', d.name], ['Variant', d.variant_code], ['IP rating', d.ip_rating],
+    ['Dimensions', d.dimensions_mm ? `${d.dimensions_mm.w} × ${d.dimensions_mm.h} × ${d.dimensions_mm.d} mm` : ''],
+    ['Weight', d.weight_kg ? `${d.weight_kg} kg` : ''],
+    ['Fits frames', (d.accepts_frames || []).join(', ')],
+    ['3D model', d.model ? `${d.model.asset_id}: ${Object.entries(d.model.lods).map(([k, v]) => `${k} ${v.size_mb} MB`).join(', ')}` : ''],
+    ['Options', (d.options || []).join('; ')]]);
+  else if (name === 'pricing') body = kv([
+    ['Unit price', money(d.unit_price, d.currency)], ['Lead time', `${d.lead_time_days} days`],
+    ['Price list', d.country], ['Valid until', new Date(d.valid_until).toLocaleString()]]);
+  else body = `<pre>${esc(JSON.stringify(d, null, 2))}</pre>`;
+  const meta = [s.fetched_at && `data from ${time(s.fetched_at)}`, s.pending && '<span class="spin"></span> fresher result on its way'].filter(Boolean).join(' · ');
+  return `<div class="panel" id="panel-${esc(name)}">
+    <div class="panel-head"><b>${esc(name)}</b>${badge(s.status)}</div>
+    ${body}
+    ${meta ? `<div class="meta">${meta}</div>` : ''}
+    ${s.error ? `<div class="err">${esc(s.error)}</div>` : ''}
+  </div>`;
+}
+
+async function loadSidebar() {
+  if (streamAbort) streamAbort.abort();
+  const tag = selected;
+  $('sel-title').textContent = `Sidebar · ${tag}`;
+  $('sel-meta').textContent = 'loading…';
+  $('sidebar').innerHTML = '<div class="meta"><span class="spin"></span> fetching all panels in parallel…</div>';
+  const r = await api('GET', `/api/projects/${PROJECT}/items/${tag}/sidebar`);
+  if (tag !== selected) return;
+  if (!r.ok) { $('sidebar').innerHTML = `<p class="err">${esc(r.data?.detail || r.status)}</p>`; $('sel-meta').textContent = ''; return; }
+  const {item, sections, elapsed_ms, budget_ms} = r.data;
+  $('sel-meta').textContent = `${item.variant_code} · rev ${item.revision} · ${elapsed_ms} ms of ${budget_ms} ms budget`;
+  $('sidebar').innerHTML = Object.entries(sections).map(([n, s]) => renderSection(n, s)).join('');
+  if (sections.sizing?.pending) streamSizing(tag);
+}
+
+async function streamSizing(tag) {
+  // EventSource cannot send an Authorization header, so read the SSE stream with fetch.
+  streamAbort = new AbortController();
+  const t0 = performance.now();
+  try {
+    const res = await fetch(`/api/projects/${PROJECT}/items/${tag}/sizing/stream`,
+      {headers: {Authorization: `Bearer ${token}`}, signal: streamAbort.signal});
+    const reader = res.body.getReader(), dec = new TextDecoder();
+    let buf = '';
+    for (;;) {
+      const {value, done} = await reader.read();
+      if (done) break;
+      buf += dec.decode(value, {stream: true});
+      const m = buf.match(/event: (\w+)\ndata: (.*)\n\n/);
+      if (m) {
+        log('SSE', `…/${tag}/sizing/stream (${m[1]})`, res.status, Math.round(performance.now() - t0));
+        if (m[1] === 'sizing' && tag === selected) {
+          const panel = $('panel-sizing');
+          if (panel) panel.outerHTML = renderSection('sizing', JSON.parse(m[2]));
+        }
+        break;
+      }
+    }
+  } catch (e) { /* aborted when the selection changed */ }
+}
+
+async function loadBom() {
+  const r = await api('GET', `/api/projects/${PROJECT}/bom`);
+  if (!r.ok) { $('bom').innerHTML = `<p class="err">${esc(r.data?.detail || r.status)}</p>`; return; }
+  const {lines, pricing} = r.data, priced = pricing.status !== 'not_permitted';
+  $('bom').innerHTML = `<table>
+    <tr><th>Variant</th><th>Description</th><th class="num">Qty</th><th>Items</th>
+      ${priced ? '<th class="num">Unit price</th><th class="num">Line total</th><th class="num">Lead time</th>' : ''}</tr>
+    ${lines.map(l => `<tr><td>${esc(l.variant_code)}</td><td>${esc(l.description || '')}</td><td class="num">${l.qty}</td><td>${esc(l.item_tags.join(', '))}</td>
+      ${priced ? (l.unit_price != null
+        ? `<td class="num">${money(l.unit_price, l.currency)}</td><td class="num">${money(l.line_total, l.currency)}</td><td class="num">${l.lead_time_days} d</td>`
+        : `<td colspan="3" class="num">${badge(l.price_status)}</td>`) : ''}</tr>`).join('')}
+  </table>
+  <div class="totals">
+    <span>Pricing ${badge(pricing.status)}</span>
+    ${priced ? `<span>Total: <b>${Object.entries(pricing.totals).map(([c, v]) => money(v, c)).join(' + ') || '—'}</b>${pricing.complete ? '' : ' (incomplete)'}</span>
+      <span>Longest lead time: <b>${pricing.longest_lead_time ? `${esc(pricing.longest_lead_time.item_tags.join(', '))}, ${pricing.longest_lead_time.lead_time_days} days` : '—'}</b></span>`
+      : '<span class="label">No price, total or lead-time fields were sent for this role.</span>'}
+  </div>`;
+}
+
+function resizeInputs() {
+  return {power_kw: Number($('power').value), voltage: Number($('voltage').value), load_pct: Number($('load').value)};
+}
+
+async function resize() {
+  const item = items.find(i => i.tag === selected);
+  $('resize-out').innerHTML = '<div class="meta"><span class="spin"></span> calling the sizing tool (0.5–3 s)…</div>';
+  const r = await api('POST', `/api/projects/${PROJECT}/items/${selected}/resize`, {...resizeInputs(), expected_revision: item?.revision});
+  $('resize-out').innerHTML = renderResize(r);
+  if (r.ok) {
+    violations[selected] = r.data.warnings.length > 0;
+    await refreshAll();
+  }
+}
+
+function renderResize(r) {
+  if (!r.ok) return `<div class="notice warn"><b>${esc(r.data?.error || r.status)}</b>: ${esc(r.data?.detail || '')}</div>`;
+  const d = r.data, bc = d.bom_change;
+  let html = d.variant_changed
+    ? `<div class="notice">Variant changed <b>${esc(d.previous_variant)}</b> → <b>${esc(d.item.variant_code)}</b>; 3D model is now <b>${esc(d.item.model_ref.asset_id)}</b>; item ${esc(d.item.tag)} keeps its id, now rev ${d.item.revision}.</div>`
+    : `<div class="notice">Same variant (${esc(d.item.variant_code)}); inputs saved, rev ${d.item.revision}.</div>`;
+  if (bc) {
+    const pc = bc.price_change;
+    html += `<table style="margin-top:8px"><tr><th>BOM line</th><th class="num">Before</th><th class="num">After</th></tr>
+      ${bc.lines.map(l => `<tr><td>${esc(l.variant_code)}</td><td class="num">${l.qty_before}</td><td class="num">${l.qty_after}</td></tr>`).join('')}</table>
+      <div class="meta">Price change: ${badge(pc.status)} ${pc.delta != null ? `<b>${pc.delta > 0 ? '+' : ''}${money(pc.delta, pc.currency)}</b>` : ''}</div>`;
+  }
+  html += d.warnings.map(w => `<div class="notice warn">${esc(w)}</div>`).join('');
+  return html;
+}
+
+async function tool(name, args) {
+  const r = await api('POST', `/api/assistant/tools/${name}`, {arguments: args});
+  let html = `<pre>${esc(JSON.stringify(r.data, null, 2))}</pre>`;
+  const res = r.data?.result;
+  if (res?.status === 'confirmation_required') {
+    html = `<div class="notice">The assistant proposes: <b>${esc(res.summary)}</b><br>
+      Nothing has changed yet. Only you can confirm (expires ${new Date(res.expires_at).toLocaleTimeString()}).
+      <div class="row" style="margin-top:8px"><button class="primary" id="confirm">Confirm re-size</button></div></div>` + html;
+  }
+  $('tool-out').innerHTML = html;
+  if ($('confirm')) $('confirm').onclick = async () => {
+    const c = await api('POST', `/api/confirmations/${res.confirmation_id}/confirm`, {});
+    $('tool-out').innerHTML = renderResize(c) + `<pre>${esc(JSON.stringify(c.data, null, 2))}</pre>`;
+    if (c.ok) { violations[c.data.item.tag] = c.data.warnings.length > 0; await refreshAll(); }
+  };
+}
+
+const MODES = {
+  normal: {sizing_failure_rate: 0.2, sizing_latency_s: [0.5, 3.0]},
+  healthy: {sizing_failure_rate: 0, sizing_latency_s: [0.1, 0.3]},
+  slow: {sizing_failure_rate: 0, sizing_latency_s: [2.5, 2.5]},
+  down: {sizing_failure_rate: 1},
+};
+async function setMode(mode) {
+  const body = mode === 'down' ? {...MODES.down} : MODES[mode];
+  await api('POST', '/mock/control', body, false);
+  document.querySelectorAll('[data-mode]').forEach(b => b.classList.toggle('on', b.dataset.mode === mode));
+}
+
+document.querySelectorAll('[data-mode]').forEach(b => b.onclick = () => setMode(b.dataset.mode));
+$('role').onchange = $('country').onchange = signIn;
+$('resize').onclick = resize;
+$('bom-refresh').onclick = loadBom;
+$('tool-details').onclick = () => tool('get_item_details', {project_id: PROJECT, item_tag: selected});
+$('tool-bom').onclick = () => tool('get_bom_cost', {project_id: PROJECT});
+$('tool-resize').onclick = () => tool('resize_item', {project_id: PROJECT, item_tag: selected, ...resizeInputs()});
+$('reset').onclick = async () => {
+  await api('POST', '/mock/control/reset', null, false);
+  violations = {};
+  selected = 'DRV-03';
+  await setMode('normal');
+  $('load').value = 130;
+  $('resize-out').innerHTML = $('tool-out').innerHTML = '';
+  await refreshAll();
+};
+
+setMode('normal').then(signIn);
+</script>
+</body>
+</html>

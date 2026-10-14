@@ -19,19 +19,23 @@ python -m venv .venv
 ```
 
 ```bash
-.venv/bin/python manage.py migrate && .venv/bin/python manage.py seed_demo
+.venv/bin/python dev.py --port 8000
 ```
 
-```bash
-.venv/bin/uvicorn config.asgi:application --port 8000
-```
+`dev.py` migrates, seeds demo project P-24117 and serves under **uvicorn (ASGI)**.
+Not `runserver`: a slow sizing run keeps going in the background after the sidebar
+has answered, and that needs a long-lived event loop. The mock systems and mock
+token issuer are served by the same process under `/mock/` on that port.
 
-Run it under **uvicorn (ASGI)**, not `runserver`: a slow sizing run keeps going in
-the background after the sidebar has answered, and that needs a long-lived event loop.
+Then open **http://127.0.0.1:8000/**, a dev console for testing everything in a browser:
 
-The mock systems are served by the same process under `/mock/`. If you use a port
-other than 8000, set `MOCK_BASE_URL=http://127.0.0.1:<port>/mock` and
-`OIDC_ISSUER=http://127.0.0.1:<port>/mock/oidc`.
+- pick a role and country (this signs you in through the mock issuer);
+- click items in the room to fill the sidebar, with each panel's status and timing;
+- re-size the selected drive and see the BOM change, the price change and any cabinet-fit warning;
+- view the BOM with prices, or without them as a channel partner;
+- call the assistant tools, and confirm a proposed re-size;
+- switch the mock sizing tool between normal, healthy, slow and down;
+- reset the demo.
 
 Or with Docker:
 

@@ -1,11 +1,14 @@
 import json
+from pathlib import Path
 
 import httpx
 from django.conf import settings
+from django.core.cache import cache
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.http import require_GET, require_POST
 
-from workspace import auth
+from integrations import registry
+from workspace import auth, demo
 
 from . import systems
 
@@ -60,3 +63,39 @@ def oidc_token(request):
         customer_group=body.get("customer_group", "standard"),
     )
     return JsonResponse({"access_token": token, "token_type": "Bearer", "expires_in": 3600})
+
+
+# --- Dev console and mock switches (dev only) ------------------------------------
+
+CONSOLE = Path(__file__).parent / "console.html"
+
+
+@require_GET
+def console(request):
+    return HttpResponse(CONSOLE.read_bytes(), content_type="text/html; charset=utf-8")
+
+
+def control(request):
+    """GET the mock switches, or POST {sizing_failure_rate, sizing_latency_s: [min, max]} to change them."""
+    if request.method == "POST":
+        try:
+            body = json.loads(request.body or b"{}")
+            if "sizing_failure_rate" in body:
+                systems.overrides["sizing_failure_rate"] = min(1.0, max(0.0, float(body["sizing_failure_rate"])))
+            if "sizing_latency_s" in body:
+                lo, hi = (float(v) for v in body["sizing_latency_s"])
+                systems.overrides["sizing_latency_s"] = (max(0.0, lo), max(lo, hi))
+        except (ValueError, TypeError):
+            return JsonResponse({"error": "invalid_json"}, status=400)
+    conf = systems.sizing_conf()
+    return JsonResponse({"sizing_failure_rate": conf["failure_rate"], "sizing_latency_s": list(conf["latency_s"])})
+
+
+@require_POST
+def reset_demo(request):
+    """Re-seed P-24117 and clear caches, breakers and mock switches."""
+    cache.clear()
+    registry.reset_state()
+    systems.reset()
+    demo.seed()
+    return JsonResponse({"status": "reset"})
