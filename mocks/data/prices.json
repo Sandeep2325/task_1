@@ -1,0 +1,92 @@
+{
+  "countries": {
+    "DE": {
+      "currency": "EUR",
+      "fx": 1.0,
+      "factor": 1.0
+    },
+    "FR": {
+      "currency": "EUR",
+      "fx": 1.0,
+      "factor": 1.02
+    },
+    "GB": {
+      "currency": "GBP",
+      "fx": 0.86,
+      "factor": 1.0
+    },
+    "US": {
+      "currency": "USD",
+      "fx": 1.09,
+      "factor": 1.05
+    },
+    "IN": {
+      "currency": "INR",
+      "fx": 91.0,
+      "factor": 0.92
+    }
+  },
+  "customer_groups": {
+    "standard": 1.0,
+    "key_account": 0.92,
+    "oem": 0.88
+  },
+  "variants": {
+    "CWD-R3-011-4": {
+      "base_eur": 2100,
+      "lead_time_days": 14
+    },
+    "CWD-R4-022-4": {
+      "base_eur": 3400,
+      "lead_time_days": 14
+    },
+    "CWD-R5-037-4": {
+      "base_eur": 5200,
+      "lead_time_days": 21
+    },
+    "CWD-R6-055-4": {
+      "base_eur": 7800,
+      "lead_time_days": 21
+    },
+    "CWD-R7-090-4": {
+      "base_eur": 11900,
+      "lead_time_days": 28
+    },
+    "CWD-R8-132-4": {
+      "base_eur": 16400,
+      "lead_time_days": 35
+    },
+    "CWD-R9-200-4": {
+      "base_eur": 23800,
+      "lead_time_days": 49
+    },
+    "CWD-R6-075-6": {
+      "base_eur": 9100,
+      "lead_time_days": 35
+    },
+    "CWD-R8-160-6": {
+      "base_eur": 19200,
+      "lead_time_days": 49
+    },
+    "CWD-R9-250-6": {
+      "base_eur": 27400,
+      "lead_time_days": 63
+    },
+    "CWC-0600": {
+      "base_eur": 4200,
+      "lead_time_days": 21
+    },
+    "CWC-0800": {
+      "base_eur": 5600,
+      "lead_time_days": 28
+    },
+    "CWC-1200": {
+      "base_eur": 7900,
+      "lead_time_days": 42
+    },
+    "CWP-S1": {
+      "base_eur": 1300,
+      "lead_time_days": 10
+    }
+  }
+}

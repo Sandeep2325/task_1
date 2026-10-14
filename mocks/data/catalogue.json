@@ -1,0 +1,550 @@
+{
+  "generated_for": "mock catalogue",
+  "variants": [
+    {
+      "variant_code": "CWD-R3-011-4",
+      "product_model": "CWD-R3",
+      "kind": "drive",
+      "name": "Industrial drive, frame R3, 11 kW, 400 V",
+      "frame": "R3",
+      "rated_kw": 11,
+      "voltage": 400,
+      "ip_rating": "IP21",
+      "options": [
+        "+B055 IP54 upgrade",
+        "+K475 Ethernet adapter",
+        "+L501 encoder interface"
+      ],
+      "dimensions_mm": {
+        "w": 125,
+        "h": 490,
+        "d": 230
+      },
+      "weight_kg": 9,
+      "model": {
+        "asset_id": "cwd-r3",
+        "format": "gltf",
+        "lods": {
+          "high": {
+            "uri": "gltf/cwd-r3/lod0.glb",
+            "size_mb": 7
+          },
+          "medium": {
+            "uri": "gltf/cwd-r3/lod1.glb",
+            "size_mb": 1.8
+          },
+          "low": {
+            "uri": "gltf/cwd-r3/lod2.glb",
+            "size_mb": 0.4
+          }
+        }
+      }
+    },
+    {
+      "variant_code": "CWD-R4-022-4",
+      "product_model": "CWD-R4",
+      "kind": "drive",
+      "name": "Industrial drive, frame R4, 22 kW, 400 V",
+      "frame": "R4",
+      "rated_kw": 22,
+      "voltage": 400,
+      "ip_rating": "IP21",
+      "options": [
+        "+B055 IP54 upgrade",
+        "+K475 Ethernet adapter",
+        "+L501 encoder interface"
+      ],
+      "dimensions_mm": {
+        "w": 205,
+        "h": 600,
+        "d": 260
+      },
+      "weight_kg": 18,
+      "model": {
+        "asset_id": "cwd-r4",
+        "format": "gltf",
+        "lods": {
+          "high": {
+            "uri": "gltf/cwd-r4/lod0.glb",
+            "size_mb": 9
+          },
+          "medium": {
+            "uri": "gltf/cwd-r4/lod1.glb",
+            "size_mb": 2.2
+          },
+          "low": {
+            "uri": "gltf/cwd-r4/lod2.glb",
+            "size_mb": 0.6
+          }
+        }
+      }
+    },
+    {
+      "variant_code": "CWD-R5-037-4",
+      "product_model": "CWD-R5",
+      "kind": "drive",
+      "name": "Industrial drive, frame R5, 37 kW, 400 V",
+      "frame": "R5",
+      "rated_kw": 37,
+      "voltage": 400,
+      "ip_rating": "IP21",
+      "options": [
+        "+B055 IP54 upgrade",
+        "+K475 Ethernet adapter",
+        "+L501 encoder interface"
+      ],
+      "dimensions_mm": {
+        "w": 205,
+        "h": 730,
+        "d": 295
+      },
+      "weight_kg": 26,
+      "model": {
+        "asset_id": "cwd-r5",
+        "format": "gltf",
+        "lods": {
+          "high": {
+            "uri": "gltf/cwd-r5/lod0.glb",
+            "size_mb": 12
+          },
+          "medium": {
+            "uri": "gltf/cwd-r5/lod1.glb",
+            "size_mb": 3.0
+          },
+          "low": {
+            "uri": "gltf/cwd-r5/lod2.glb",
+            "size_mb": 0.8
+          }
+        }
+      }
+    },
+    {
+      "variant_code": "CWD-R6-055-4",
+      "product_model": "CWD-R6",
+      "kind": "drive",
+      "name": "Industrial drive, frame R6, 55 kW, 400 V",
+      "frame": "R6",
+      "rated_kw": 55,
+      "voltage": 400,
+      "ip_rating": "IP21",
+      "options": [
+        "+B055 IP54 upgrade",
+        "+K475 Ethernet adapter",
+        "+L501 encoder interface"
+      ],
+      "dimensions_mm": {
+        "w": 250,
+        "h": 730,
+        "d": 330
+      },
+      "weight_kg": 42,
+      "model": {
+        "asset_id": "cwd-r6",
+        "format": "gltf",
+        "lods": {
+          "high": {
+            "uri": "gltf/cwd-r6/lod0.glb",
+            "size_mb": 15
+          },
+          "medium": {
+            "uri": "gltf/cwd-r6/lod1.glb",
+            "size_mb": 3.8
+          },
+          "low": {
+            "uri": "gltf/cwd-r6/lod2.glb",
+            "size_mb": 0.9
+          }
+        }
+      }
+    },
+    {
+      "variant_code": "CWD-R7-090-4",
+      "product_model": "CWD-R7",
+      "kind": "drive",
+      "name": "Industrial drive, frame R7, 90 kW, 400 V",
+      "frame": "R7",
+      "rated_kw": 90,
+      "voltage": 400,
+      "ip_rating": "IP21",
+      "options": [
+        "+B055 IP54 upgrade",
+        "+K475 Ethernet adapter",
+        "+L501 encoder interface"
+      ],
+      "dimensions_mm": {
+        "w": 300,
+        "h": 880,
+        "d": 380
+      },
+      "weight_kg": 54,
+      "model": {
+        "asset_id": "cwd-r7",
+        "format": "gltf",
+        "lods": {
+          "high": {
+            "uri": "gltf/cwd-r7/lod0.glb",
+            "size_mb": 21
+          },
+          "medium": {
+            "uri": "gltf/cwd-r7/lod1.glb",
+            "size_mb": 5.2
+          },
+          "low": {
+            "uri": "gltf/cwd-r7/lod2.glb",
+            "size_mb": 1.3
+          }
+        }
+      }
+    },
+    {
+      "variant_code": "CWD-R8-132-4",
+      "product_model": "CWD-R8",
+      "kind": "drive",
+      "name": "Industrial drive, frame R8, 132 kW, 400 V",
+      "frame": "R8",
+      "rated_kw": 132,
+      "voltage": 400,
+      "ip_rating": "IP21",
+      "options": [
+        "+B055 IP54 upgrade",
+        "+K475 Ethernet adapter",
+        "+L501 encoder interface"
+      ],
+      "dimensions_mm": {
+        "w": 300,
+        "h": 960,
+        "d": 400
+      },
+      "weight_kg": 70,
+      "model": {
+        "asset_id": "cwd-r8",
+        "format": "gltf",
+        "lods": {
+          "high": {
+            "uri": "gltf/cwd-r8/lod0.glb",
+            "size_mb": 28
+          },
+          "medium": {
+            "uri": "gltf/cwd-r8/lod1.glb",
+            "size_mb": 7.0
+          },
+          "low": {
+            "uri": "gltf/cwd-r8/lod2.glb",
+            "size_mb": 1.8
+          }
+        }
+      }
+    },
+    {
+      "variant_code": "CWD-R9-200-4",
+      "product_model": "CWD-R9",
+      "kind": "drive",
+      "name": "Industrial drive, frame R9, 200 kW, 400 V",
+      "frame": "R9",
+      "rated_kw": 200,
+      "voltage": 400,
+      "ip_rating": "IP21",
+      "options": [
+        "+B055 IP54 upgrade",
+        "+K475 Ethernet adapter",
+        "+L501 encoder interface"
+      ],
+      "dimensions_mm": {
+        "w": 380,
+        "h": 1050,
+        "d": 420
+      },
+      "weight_kg": 98,
+      "model": {
+        "asset_id": "cwd-r9",
+        "format": "gltf",
+        "lods": {
+          "high": {
+            "uri": "gltf/cwd-r9/lod0.glb",
+            "size_mb": 39
+          },
+          "medium": {
+            "uri": "gltf/cwd-r9/lod1.glb",
+            "size_mb": 9.8
+          },
+          "low": {
+            "uri": "gltf/cwd-r9/lod2.glb",
+            "size_mb": 2.4
+          }
+        }
+      }
+    },
+    {
+      "variant_code": "CWD-R6-075-6",
+      "product_model": "CWD-R6",
+      "kind": "drive",
+      "name": "Industrial drive, frame R6, 75 kW, 690 V",
+      "frame": "R6",
+      "rated_kw": 75,
+      "voltage": 690,
+      "ip_rating": "IP21",
+      "options": [
+        "+B055 IP54 upgrade",
+        "+K475 Ethernet adapter",
+        "+L501 encoder interface"
+      ],
+      "dimensions_mm": {
+        "w": 250,
+        "h": 730,
+        "d": 330
+      },
+      "weight_kg": 44,
+      "model": {
+        "asset_id": "cwd-r6",
+        "format": "gltf",
+        "lods": {
+          "high": {
+            "uri": "gltf/cwd-r6/lod0.glb",
+            "size_mb": 18
+          },
+          "medium": {
+            "uri": "gltf/cwd-r6/lod1.glb",
+            "size_mb": 4.5
+          },
+          "low": {
+            "uri": "gltf/cwd-r6/lod2.glb",
+            "size_mb": 1.1
+          }
+        }
+      }
+    },
+    {
+      "variant_code": "CWD-R8-160-6",
+      "product_model": "CWD-R8",
+      "kind": "drive",
+      "name": "Industrial drive, frame R8, 160 kW, 690 V",
+      "frame": "R8",
+      "rated_kw": 160,
+      "voltage": 690,
+      "ip_rating": "IP21",
+      "options": [
+        "+B055 IP54 upgrade",
+        "+K475 Ethernet adapter",
+        "+L501 encoder interface"
+      ],
+      "dimensions_mm": {
+        "w": 300,
+        "h": 960,
+        "d": 400
+      },
+      "weight_kg": 73,
+      "model": {
+        "asset_id": "cwd-r8",
+        "format": "gltf",
+        "lods": {
+          "high": {
+            "uri": "gltf/cwd-r8/lod0.glb",
+            "size_mb": 32
+          },
+          "medium": {
+            "uri": "gltf/cwd-r8/lod1.glb",
+            "size_mb": 8.0
+          },
+          "low": {
+            "uri": "gltf/cwd-r8/lod2.glb",
+            "size_mb": 2.0
+          }
+        }
+      }
+    },
+    {
+      "variant_code": "CWD-R9-250-6",
+      "product_model": "CWD-R9",
+      "kind": "drive",
+      "name": "Industrial drive, frame R9, 250 kW, 690 V",
+      "frame": "R9",
+      "rated_kw": 250,
+      "voltage": 690,
+      "ip_rating": "IP21",
+      "options": [
+        "+B055 IP54 upgrade",
+        "+K475 Ethernet adapter",
+        "+L501 encoder interface"
+      ],
+      "dimensions_mm": {
+        "w": 380,
+        "h": 1050,
+        "d": 420
+      },
+      "weight_kg": 101,
+      "model": {
+        "asset_id": "cwd-r9",
+        "format": "gltf",
+        "lods": {
+          "high": {
+            "uri": "gltf/cwd-r9/lod0.glb",
+            "size_mb": 40
+          },
+          "medium": {
+            "uri": "gltf/cwd-r9/lod1.glb",
+            "size_mb": 10.0
+          },
+          "low": {
+            "uri": "gltf/cwd-r9/lod2.glb",
+            "size_mb": 2.5
+          }
+        }
+      }
+    },
+    {
+      "variant_code": "CWC-0600",
+      "product_model": "CWC",
+      "kind": "cabinet",
+      "name": "Drive cabinet, 600 mm, IP54",
+      "ip_rating": "IP54",
+      "accepts_frames": [
+        "R3",
+        "R4",
+        "R5"
+      ],
+      "options": [
+        "+F250 main switch",
+        "+G300 cabinet heater"
+      ],
+      "dimensions_mm": {
+        "w": 600,
+        "h": 2000,
+        "d": 600
+      },
+      "weight_kg": 150,
+      "model": {
+        "asset_id": "cwc-0600",
+        "format": "gltf",
+        "lods": {
+          "high": {
+            "uri": "gltf/cwc-0600/lod0.glb",
+            "size_mb": 12
+          },
+          "medium": {
+            "uri": "gltf/cwc-0600/lod1.glb",
+            "size_mb": 3.0
+          },
+          "low": {
+            "uri": "gltf/cwc-0600/lod2.glb",
+            "size_mb": 0.8
+          }
+        }
+      }
+    },
+    {
+      "variant_code": "CWC-0800",
+      "product_model": "CWC",
+      "kind": "cabinet",
+      "name": "Drive cabinet, 800 mm, IP54",
+      "ip_rating": "IP54",
+      "accepts_frames": [
+        "R3",
+        "R4",
+        "R5",
+        "R6",
+        "R7"
+      ],
+      "options": [
+        "+F250 main switch",
+        "+G300 cabinet heater"
+      ],
+      "dimensions_mm": {
+        "w": 800,
+        "h": 2000,
+        "d": 600
+      },
+      "weight_kg": 200,
+      "model": {
+        "asset_id": "cwc-0800",
+        "format": "gltf",
+        "lods": {
+          "high": {
+            "uri": "gltf/cwc-0800/lod0.glb",
+            "size_mb": 12
+          },
+          "medium": {
+            "uri": "gltf/cwc-0800/lod1.glb",
+            "size_mb": 3.0
+          },
+          "low": {
+            "uri": "gltf/cwc-0800/lod2.glb",
+            "size_mb": 0.8
+          }
+        }
+      }
+    },
+    {
+      "variant_code": "CWC-1200",
+      "product_model": "CWC",
+      "kind": "cabinet",
+      "name": "Drive cabinet, 1200 mm, IP54",
+      "ip_rating": "IP54",
+      "accepts_frames": [
+        "R6",
+        "R7",
+        "R8",
+        "R9"
+      ],
+      "options": [
+        "+F250 main switch",
+        "+G300 cabinet heater"
+      ],
+      "dimensions_mm": {
+        "w": 1200,
+        "h": 2000,
+        "d": 600
+      },
+      "weight_kg": 300,
+      "model": {
+        "asset_id": "cwc-1200",
+        "format": "gltf",
+        "lods": {
+          "high": {
+            "uri": "gltf/cwc-1200/lod0.glb",
+            "size_mb": 12
+          },
+          "medium": {
+            "uri": "gltf/cwc-1200/lod1.glb",
+            "size_mb": 3.0
+          },
+          "low": {
+            "uri": "gltf/cwc-1200/lod2.glb",
+            "size_mb": 0.8
+          }
+        }
+      }
+    },
+    {
+      "variant_code": "CWP-S1",
+      "product_model": "CWP",
+      "kind": "panel",
+      "name": "Control panel, standard",
+      "ip_rating": "IP54",
+      "options": [],
+      "dimensions_mm": {
+        "w": 400,
+        "h": 600,
+        "d": 210
+      },
+      "weight_kg": 14,
+      "model": {
+        "asset_id": "cwp-s1",
+        "format": "gltf",
+        "lods": {
+          "high": {
+            "uri": "gltf/cwp-s1/lod0.glb",
+            "size_mb": 3
+          },
+          "medium": {
+            "uri": "gltf/cwp-s1/lod1.glb",
+            "size_mb": 0.8
+          },
+          "low": {
+            "uri": "gltf/cwp-s1/lod2.glb",
+            "size_mb": 0.2
+          }
+        }
+      }
+    }
+  ]
+}

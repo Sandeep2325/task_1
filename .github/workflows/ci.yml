@@ -1,0 +1,33 @@
+name: ci
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - run: python manage.py check
+      - run: python manage.py makemigrations --check --dry-run
+      - run: python manage.py test -v 2
+
+  docker:
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker build -t cloudworx-integrations .
+      - name: smoke test
+        run: |
+          docker run -d --name svc -p 8000:8000 cloudworx-integrations
+          for i in $(seq 1 30); do curl -fs http://127.0.0.1:8000/healthz && break; sleep 1; done
+          TOKEN=$(curl -fs -X POST http://127.0.0.1:8000/mock/oidc/token -H 'content-type: application/json' \
+            -d '{"role":"sales_engineer","country":"DE"}' | python3 -c "import sys,json;print(json.load(sys.stdin)['access_token'])")
+          curl -fs -H "Authorization: Bearer $TOKEN" http://127.0.0.1:8000/api/projects/P-24117/bom

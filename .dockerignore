@@ -1,0 +1,6 @@
+.venv
+.git
+db.sqlite3
+.dev-keys
+__pycache__
+*.pdf
