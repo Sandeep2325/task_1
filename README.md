@@ -1,4 +1,4 @@
-# Cloudworx sidebar integration service (Part B)
+# Clo####x sidebar integration service (Part B)
 
 A small Django (async) service that feeds the workspace sidebar from three mocked
 enterprise systems: a slow, flaky **sizing tool**, a static-JSON **catalogue** and
