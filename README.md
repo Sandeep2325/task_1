@@ -76,6 +76,8 @@ Use `"role":"channel_partner"` for a user who must never see prices, and
 
 ## API
 
+Full reference with request and response examples, every status code and the dev-only endpoints: **[docs/API.md](docs/API.md)**.
+
 | Method | Path | Purpose |
 |---|---|---|
 | GET | `/api/projects/{id}` | Layout: placed items with variant, 3D model ref, revision |
@@ -165,8 +167,14 @@ Key decisions:
 
 ## AI tools used
 
-Built with Claude Code (Claude Opus) as a pair programmer. I wrote the requirements
-and design decisions (adapter pipeline, per-section statuses, entitlement-before-cache,
-confirmed writes). Claude drafted code and tests to that design, and I reviewed,
-ran and corrected them. For example, the pricing burst was lowered to 1 so the
-client-side bucket can never exceed the ERP's 5-per-second window.
+Built with **Claude Code** (desktop app, Claude Opus). Claude Code wrote the code,
+the tests and the first draft of the design document. I chose Django, set the
+scope and order of work, asked for the browser console and the API reference,
+challenged the choices I didn't understand (DRF vs plain async Django, uvicorn vs
+`runserver`, which I checked with an experiment), ran and tested every flow myself,
+and decided what was finished.
+
+The full story is in **[docs/AI_WORKFLOW.md](docs/AI_WORKFLOW.md)**: my prompts in
+order, the questions I pushed back with, how I verified the output, the mistakes
+that were caught and fixed, and which design decisions came from me and which from
+the AI.

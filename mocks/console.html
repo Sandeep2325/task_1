@@ -388,7 +388,12 @@ $('reset').onclick = async () => {
   await refreshAll();
 };
 
-setMode('normal').then(signIn);
+// Optional deep link, e.g. /?role=channel_partner&country=IN&item=DRV-04&mode=healthy
+const qs = new URLSearchParams(location.search);
+if (qs.get('role')) $('role').value = qs.get('role');
+if (qs.get('country')) $('country').value = qs.get('country');
+if (qs.get('item')) selected = qs.get('item');
+setMode(MODES[qs.get('mode')] ? qs.get('mode') : 'normal').then(signIn);
 </script>
 </body>
 </html>
